@@ -9,7 +9,7 @@ const app = express()
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-module.exports.start = (port = 8080) => {
+module.exports.start = (port) => {
     app.listen(port,
         () => console.log(`RoomBooking dApp listening on port ${port}!`)
     )

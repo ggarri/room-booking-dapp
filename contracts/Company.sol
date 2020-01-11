@@ -40,11 +40,15 @@ contract Company is Ownable {
     event EmployeeAdded(bytes32 username, address addr);
     event EmployeeRemoved(address addr);
 
-    constructor(bytes32 companyId, string memory companyName, uint8 openAtHour, uint8 closeAtHour) public {
+    constructor(bytes32 companyId, string memory companyName, uint8 openAtHour, uint8 closeAtHour) Ownable(msg.sender) public {
         _companyId = companyId;
         _companyName = companyName;
         _openAtHour = openAtHour;
         _closeAtHour = closeAtHour;
+    }
+
+    function isBuildingOpen(uint8 atHour) public view returns (bool) {
+        return atHour >= _openAtHour && atHour < _closeAtHour;
     }
 
     /*
@@ -73,16 +77,13 @@ contract Company is Ownable {
         emit RoomRemoved(roomId);
     }
 
-    function _getRoomIndex(bytes32 roomId) internal view returns (uint index, bool exists) {
-        for (uint idx = 0; idx <= _roomIds.length - 1; idx++) {
-            if (_roomIds[idx] == roomId) return (idx, true);
-        }
-
-        return (0, false);
-    }
-
     function getRoomInfo(bytes32 rId) public view returns (bytes32 roomId, string memory name) {
         return (_roomId2Room[rId].roomId, _roomId2Room[rId].name);
+    }
+
+    function roomExists(bytes32 roomId) public view returns (bool) {
+        (uint idx, bool exists) = _getRoomIndex(roomId);
+        return exists;
     }
 
 
@@ -114,14 +115,6 @@ contract Company is Ownable {
         emit EmployeeRemoved(addr);
     }
 
-    function _getEmployeeIndex(address addr) internal view returns (uint index, bool exists) {
-        for (uint idx = 0; idx <= _employeeAddrs.length - 1; idx++) {
-            if (_employeeAddrs[idx] == addr) return (idx, true);
-        }
-
-        return (0, false);
-    }
-
     function getEmployeeAddr(bytes32 username) public view returns (address) {
         for (uint idx = 0; idx <= _employeeAddrs.length - 1; idx++) {
             address addr = _employeeAddrs[idx];
@@ -135,7 +128,33 @@ contract Company is Ownable {
         return _addr2Employee[addr].username;
     }
 
-    function isEmployee(address addr) public view returns (bool) {
-        return _addr2Employee[addr].addr != address(0x0);
+    function employeeExists(address addr) public view returns (bool) {
+        (uint idx, bool exists) = _getEmployeeIndex(addr);
+        return exists;
+    }
+
+
+    /*
+     * HELPERS
+    */
+
+    function _getEmployeeIndex(address addr) internal view returns (uint index, bool exists) {
+        if (_employeeAddrs.length == 0) return (0, false);
+
+        for (uint idx = 0; idx <= _employeeAddrs.length - 1; idx++) {
+            if (_employeeAddrs[idx] == addr) return (idx, true);
+        }
+
+        return (0, false);
+    }
+
+    function _getRoomIndex(bytes32 roomId) internal view returns (uint index, bool exists) {
+        if(_roomIds.length == 0) return (0, false);
+
+        for (uint idx = 0; idx <= _roomIds.length - 1; idx++) {
+            if (_roomIds[idx] == roomId) return (idx, true);
+        }
+
+        return (0, false);
     }
 }

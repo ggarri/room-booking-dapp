@@ -4,9 +4,9 @@
   "description": "Room booking platform",
   "main": "src/index.js",
   "scripts": {
-    "truffle:test": "truffle test",
+    "truffle:test": "truffle test --network=test",
     "truffle:compile": "truffle compile --all",
-    "truffle:deploy": "truffle deploy",
+    "truffle:deploy": "truffle deploy --reset --network",
     "server:watch": "cross-env NODE_ENV=development nodemon --watch src --inspect=0.0.0.0:9230 ./src/index.js",
     "server:dev": "cross-env NODE_ENV=development node ./src/index.js",
     "server:prod": "cross-env NODE_ENV=production node ./src/index.js"
@@ -28,13 +28,17 @@
   },
   "homepage": "https://github.com/ggarri/room-booking-dapp#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cross-env": "^6.0.3",
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "lodash.get": "^4.4.2",
     "web3": "^1.2.4"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "nodemon": "^2.0.2",
     "truffle": "^5.1.7"
   }

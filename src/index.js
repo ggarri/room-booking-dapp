@@ -6,4 +6,15 @@
 
 const server = require('./express');
 
-server.start()
+module.exports = (() => {
+  let server, web3;
+  return {
+    init: (httpCfg, web3Cfg) => {
+
+    },
+    start: () => {
+      const { port } = httpCfg;
+      server.start(port || 8080)
+    }
+  }
+})();
