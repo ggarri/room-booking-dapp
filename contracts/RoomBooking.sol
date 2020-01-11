@@ -102,6 +102,7 @@ contract RoomBooking {
 
     function removeReservation(bytes32 reservationId) onlyEmployees(msg.sender) public {
         require(_reservations[reservationId].employeeAddr != address(0x0), "Reservation is not in the system");
+        require(_reservations[reservationId].employeeAddr == msg.sender, "Cancellation is not authorized");
         _reservations[reservationId].employeeAddr = address(0x0);
         emit ReservationRemoved(reservationId);
     }

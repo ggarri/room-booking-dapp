@@ -15,10 +15,11 @@ for this (as they do not trust each other or anyone else to not take advantage o
 situation) - but it’s up to you to decide if you want to implement this functionality or not,
 and how.
 The booking system has the following functionalities:
-● Users can see hourly meeting room availability of any of the 20 meeting rooms
+
+- Users can see hourly meeting room availability of any of the 20 meeting rooms
 on COLA day (8:00-9:00, 9:00-10:00, etc.)
-● Users can book meeting rooms by the hour (first come first served)
-● Users can cancel their own reservations
+- Users can book meeting rooms by the hour (first come first served)
+- Users can cancel their own reservations
 
 ### Requirements
 
@@ -47,6 +48,7 @@ we need to force the application business logic using smart-contracts due, and o
 for it such as NEO, EOS and others we are going to take `Ethereum` + `Solidity` to implement this project.
 
 To interact with an ethereum blockchain we have two main alternatives:
+
 - Client side application
 - Server side application
 
@@ -91,7 +93,7 @@ Using `Ethereum` ...
 $> npm run truffle:compile
 ```
 
-**Step 1: Compile smart contracts**
+**Step 2: Deploying and initializing application data**
 
 @TODO
 
@@ -101,7 +103,12 @@ $> npm run truffle:compile
 
 ### Testing
 
+**Testing contracts**
 ```bash
 npm run truffle:test
 ```
+
+**Testing api**
+
+@TODO Integrate JTest+Supertest framework
 

@@ -23,6 +23,22 @@ module.exports.deploy = (web3, { from }, { companyAddr }) => {
   });
 }
 
+module.exports.appendCompany = (web3, { from, contractAt }, { companyAddr }) => {
+  validators.validateAddress(from, 'from');
+  validators.validateAddress(contractAt, 'contractAt');
+  validators.validateAddress(companyAddr, 'companyAddr');
+
+  return web3Wrapper.contractSendTx(web3, {
+    to: contractAt,
+    from,
+    method: 'appendCompany',
+    abi: roomBookingContract.abi,
+    params: [
+      companyAddr
+    ]
+  })
+}
+
 module.exports.createReservation = (web3, { from, contractAt }, { companyId, roomId, bookDate }) => {
   validators.validateAddress(from, 'from');
   validators.validateAddress(contractAt, 'contractAt');
@@ -40,7 +56,7 @@ module.exports.createReservation = (web3, { from, contractAt }, { companyId, roo
     to: contractAt,
     from,
     method: 'createReservation',
-    abi: companyContract.abi,
+    abi: roomBookingContract.abi,
     params: [
       web3Utils.strToBytes(companyId),
       web3Utils.strToBytes(roomId),
@@ -60,7 +76,7 @@ module.exports.removeReservation = (web3, { from, contractAt }, { reservationId 
     to: contractAt,
     from,
     method: 'removeReservation',
-    abi: companyContract.abi,
+    abi: roomBookingContract.abi,
     params: [
       reservationId
     ]
@@ -74,7 +90,7 @@ module.exports.reservationInfo = (web3, { contractAt }, { reservationId }) => {
   return web3Wrapper.contractCall(web3, {
     to: contractAt,
     method: 'removeReservation',
-    abi: companyContract.abi,
+    abi: roomBookingContract.abi,
     params: [
       reservationId
     ]
@@ -105,7 +121,7 @@ module.exports.isRoomAvailable = (web3, { contractAt }, { companyId, roomId, boo
   return web3Wrapper.contractCall(web3, {
     to: contractAt,
     method: 'isRoomAvailable',
-    abi: companyContract.abi,
+    abi: roomBookingContract.abi,
     params: [
       web3Utils.strToBytes(companyId),
       web3Utils.strToBytes(roomId),
