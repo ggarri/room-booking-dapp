@@ -5,6 +5,6 @@
  */
 
 module.exports.web3cfg = {
-  provider: `${process.env.RPC_HOST || 'http://localhost'}` + `${process.env.RPC_PORT || '8545'}`,
+  provider: `${process.env.RPC_HOST || 'http://localhost'}` + ':' + `${process.env.RPC_PORT || '8545'}`,
   gasPrice: process.env.GAS_PRICE || 500000000000
 };

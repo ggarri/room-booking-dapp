@@ -12,6 +12,11 @@ function assert(errMsg, argName) {
   throw new Error(errMsg);
 }
 
+//@TODO Include ETH checksum and sha3 verification
+function isAddress(address) {
+  return (/^(0x){1}[0-9a-fA-F]{40}$/i.test(address));
+}
+
 module.exports.validateAddress = (value, argName = null) => {
   if (!isAddress(value)) {
     assert(`Invalid eth address "${value}"`, argName);

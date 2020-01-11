@@ -27,6 +27,8 @@ module.exports.deploy = (web3, { from }, { companyId, companyName, openAt, close
       openAt,
       closeAt
     ]
+  }).then(tx => {
+    return tx.contractAddress;
   });
 }
 

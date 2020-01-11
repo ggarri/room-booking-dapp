@@ -1,7 +1,9 @@
 {
-    "companyId": "COLA",
-    "companyName": "Cola S.L",
-    "owner": "0x68146704DA2f1dC14c9c32d497efc25d769ffbC2",
+    "companyId": "PEPSI",
+    "companyName": "PEPSI S.A",
+    "companyOwner": "0x68146704DA2f1dC14c9c32d497efc25d769ffbC2",
+    "openAt": 8,
+    "closeAt": 20,
     "employees": [
         {
             "username": "employee_1",
@@ -22,19 +24,20 @@
     ],
     "rooms": [
         {
-            "roomId": "C01", "name": "Room_C01"
+            "id": "P01",
+            "name": "Room_P01"
         },
         {
-            "roomId": "C02",
-            "name": "Room_C02"
+            "id": "P02",
+            "name": "Room_P02"
         },
         {
-            "roomId": "C03",
-            "name": "Room_C03"
+            "id": "P03",
+            "name": "Room_P03"
         },
         {
-            "roomId": "C03",
-            "name": "Room_C03"
+            "id": "P03",
+            "name": "Room_P03"
         }
     ]
 }

@@ -4,6 +4,8 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
+require('dotenv').config()
+
 const server = require('./express');
 
 module.exports = (() => {
