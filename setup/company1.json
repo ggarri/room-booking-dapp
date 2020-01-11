@@ -1,0 +1,40 @@
+{
+    "companyId": "COLA",
+    "companyName": "Cola S.L",
+    "owner": "0x68146704DA2f1dC14c9c32d497efc25d769ffbC2",
+    "employees": [
+        {
+            "username": "employee_1",
+            "address": "0x2eF8fF21Dc389eB470a616ddF2D3535bdCa7e2b9"
+        },
+        {
+            "username": "employee_2",
+            "address": "0xA1cd12FBe0F9e23Fc64526255c5b50238D432176"
+        },
+        {
+            "username": "employee_3",
+            "address": "0x0dC245D3Ee545d5B4918C64a362561cC5E530649"
+        },
+        {
+            "username": "employee_4",
+            "address": "0x42F3CeD9b7D71D2219807fded512ee13b3Cd09DE"
+        }
+    ],
+    "rooms": [
+        {
+            "roomId": "C01", "name": "Room_C01"
+        },
+        {
+            "roomId": "C02",
+            "name": "Room_C02"
+        },
+        {
+            "roomId": "C03",
+            "name": "Room_C03"
+        },
+        {
+            "roomId": "C03",
+            "name": "Room_C03"
+        }
+    ]
+}

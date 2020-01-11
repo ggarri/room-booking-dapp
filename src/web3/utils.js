@@ -24,3 +24,26 @@ module.exports.bnToInt = (web3, value) => {
   if(!web3.utils.isBN(value)) return null;
   return parseInt(value.toString());
 }
+
+
+module.exports.calculateEstimatedGas = (method, params) => {
+  return new Promise((resolve, reject) => {
+    method.estimateGas(params, (err, estimatedGas) => {
+      if (err) {
+        reject(err);
+      } else {
+        const gasOverflow = parseInt(estimatedGas * 1.2); // 20% Increment
+        const gasMin = 100000;
+        const gas = gasMin > gasOverflow ? gasMin : gasOverflow;
+        resolve(gas);
+      }
+    });
+  })
+};
+
+module.exports.newFailedTxError = (txReceipt) => {
+  const err = new Error(`Tx ${txReceipt.hash} has been reverted`);
+  err.receipt = txReceipt;
+  err.code = 'FailedTxError';
+  return err;
+};
