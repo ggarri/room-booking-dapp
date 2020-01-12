@@ -110,18 +110,33 @@ module.exports.reservationInfo = (web3, { contractAt }, { reservationId }) => {
   })
 }
 
-module.exports.isRoomAvailable = (web3, { contractAt }, { companyId, roomId, bookDate }) => {
-  validators.validateAddress(from, 'from');
+module.exports.companyAddress = (web3, { contractAt }, { companyId }) => {
+  return web3Wrapper.contractCall(web3, {
+    to: contractAt,
+    method: 'companyAddress',
+    abi: roomBookingContract.abi,
+    params: [
+      web3Utils.strToBytes(web3, companyId)
+    ]
+  }).then(res => {
+    if(web3Utils.isEmptyAddress(res)) {
+      throw new Error(`Company "${companyId}" does not exists`);
+    }
+    return res;
+  })
+}
+
+module.exports.isRoomAvailable = (web3, { contractAt }, { companyId, roomId, bookingDateHour }) => {
   validators.validateAddress(contractAt, 'contractAt');
 
   validators.validateNotEmptyStr(companyId, 'companyId');
   validators.validateNotEmptyStr(roomId, 'roomId');
-  validators.validateDate(bookDate, 'date');
+  validators.validateDate(bookingDateHour, 'date');
 
-  const year = bookDate.getFullYear();
-  const month = bookDate.getMonth() + 1;
-  const day = bookDate.getDay();
-  const hour = bookDate.getHours();
+  const year = bookingDateHour.getFullYear();
+  const month = bookingDateHour.getMonth() + 1;
+  const day = bookingDateHour.getDay();
+  const hour = bookingDateHour.getHours();
 
   return web3Wrapper.contractCall(web3, {
     to: contractAt,

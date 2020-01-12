@@ -4,11 +4,12 @@ const http = require('http');
 
 const {
   routeNotFoundHandler,
-  errorHandler,
-} = require('./middleware/error');
+  fallbackErrorHandler
+} = require('./middleware/fallback');
 
 const {
-  web3DecoratorHandler
+  web3PreHandler,
+  web3PostHandler
 } = require('./middleware/web3');
 
 const roomBookingRouter = require('./router/roomBooking')
@@ -20,18 +21,18 @@ module.exports.newServer = (web3, { port, host, env }) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
-  app.use(web3DecoratorHandler(web3));
+  app.use(web3PreHandler(web3));
 
-  app.get('/hello', (req, res) => {
+  app.get('/hello', (req, res, next) => {
     res.send('Hello World!');
   });
 
-  app.use('/roomBooking', roomBookingRouter);
+  app.use('', roomBookingRouter, web3PostHandler(web3));
 
   // catch 404 and forward to error handler
   app.use(routeNotFoundHandler);
   // error handler
-  app.use(errorHandler);
+  app.use(fallbackErrorHandler);
 
   app.set('port', port);
   app.set('host', host);

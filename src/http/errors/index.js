@@ -18,9 +18,10 @@ module.exports.InvalidRequestError = (errMsg) => {
  * RouteNotFound
  */
 const RouteNotFoundErrorCode = module.exports.RouteNotFoundErrorCode = 'ROUTE_NOT_FOUND';
-module.exports.RouteNotFoundError = () => {
-  const err = new Error(`Route not found`);
-  err.code = 404;
+module.exports.RouteNotFoundError = (req) => {
+  const err = new Error(`${req.method}: ${req.originalUrl}`);
+  err.code = RouteNotFoundErrorCode;
+  err.status = 404;
   return err;
 }
 

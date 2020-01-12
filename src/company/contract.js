@@ -67,3 +67,19 @@ module.exports.addRoom = (web3, { from, contractAt }, { roomId, roomName }) => {
     ]
   })
 }
+
+module.exports.getEmployeeAddr = (web3, { contractAt }, { username }) => {
+  return web3Wrapper.contractCall(web3, {
+    to: contractAt,
+    method: 'getEmployeeAddr',
+    abi: companyContract.abi,
+    params: [
+      web3Utils.strToBytes(web3, username)
+    ]
+  }).then(res => {
+    if (web3Utils.isEmptyAddress(res)) {
+      throw new Error(`Username "${companyId}" does not exists`);
+    }
+    return res;
+  })
+}

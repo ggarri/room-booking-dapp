@@ -8,11 +8,14 @@
 const express = require('express');
 
 const {
-  newReservationHandler
+  newReservationHandler,
+  isRoomAvailableHandler
 } = require('../handler/roomBooking');
 
 let router = express.Router();
 
-router.post('', newReservationHandler);
+router.get('/isRoomAvailable', isRoomAvailableHandler);
+router.post('/new', newReservationHandler);
+
 
 module.exports = router;

@@ -124,6 +124,16 @@ contract RoomBooking {
         );
     }
 
+    function companyAddress(bytes32 companyId) public view returns (address) {
+        if (_companies.length == 0) return address(0x0);
+
+        for (uint idx = 0; idx <= _companies.length - 1; idx++) {
+            if (_companies[idx]._companyId() == companyId) return address(_companies[idx]);
+        }
+
+        return address(0x0);
+    }
+
 
     /*
      * HELPERS

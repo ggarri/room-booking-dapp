@@ -16,7 +16,7 @@ module.exports.failedJsonResponse = (errMsg, errCode) => {
   return {
     success: false,
     err: {
-      msg: errMsg,
+      message: errMsg,
       code: errCode || 500
     }
   };

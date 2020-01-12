@@ -40,3 +40,7 @@ module.exports.calculateEstimatedGas = (method, params) => {
     });
   })
 };
+
+module.exports.isEmptyAddress = (value) => {
+  return value === "0x0000000000000000000000000000000000000000";
+}

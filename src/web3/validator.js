@@ -6,6 +6,7 @@
 
 
 const { AssertArgError } = require('./errors');
+const { isEmptyAddress } = require('./utils');
 
 //@TODO Include ETH checksum and sha3 verification
 function isAddress(address) {
@@ -37,5 +38,11 @@ module.exports.validateNotEmptyStr = (value, argName = null) => {
 module.exports.validateDate = (value, argName = null) => {
   if (!value instanceof Date) {
     throw AssertArgError(`Invalid date object "${value}"`, argName);
+  }
+}
+
+module.exports.isNotEmptyAddress = (value, argName) => {
+  if(isEmptyAddress(value)) {
+    throw AssertArgError(`Invalid empty address`, argName);
   }
 }

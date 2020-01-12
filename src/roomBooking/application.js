@@ -9,24 +9,46 @@ const {
 } = require('../config');
 
 const {
-  createReservation
+  createReservation: txCreateReservation,
+  isRoomAvailable: callIsRoomAvailable
 } = require('./contract');
 
-module.exports.createReservation = async (web3, { from, roomId, companyId, bookingDateHour }) => {
-  try {
-    //@TODO validate availability
-    const rId = await createReservation(web3, {
-      from,
+const{
+  NotAvailableRoomError
+} = require('./errors')
+
+const isRoomAvailable = module.exports.isRoomAvailable =  async (web3, { roomId, companyId, bookingDateHour }) => {
+    const isAvailable = await callIsRoomAvailable(web3, {
       contractAt: roomBookingAddr
     }, {
       roomId,
       companyId,
       bookingDateHour
-    })
+    });
 
-    return rId;
-  } catch ( err ) {
-    next(err)
+    return isAvailable
+}
+
+module.exports.createReservation = async (web3, { from, roomId, companyId, bookingDateHour }) => {
+  const isAvailable = isRoomAvailable(web3, {
+    roomId,
+    companyId,
+    bookingDateHour
+  });
+
+  if(!isAvailable) {
+    throw NotAvailableRoomError(companyId, roomId)
   }
+
+  const rId = await txCreateReservation(web3, {
+    from,
+    contractAt: roomBookingAddr
+  }, {
+    roomId,
+    companyId,
+    bookingDateHour
+  })
+
+  return rId;
 }
 
