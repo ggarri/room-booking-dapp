@@ -40,10 +40,3 @@ module.exports.calculateEstimatedGas = (method, params) => {
     });
   })
 };
-
-module.exports.newFailedTxError = (txReceipt) => {
-  const err = new Error(`Tx ${txReceipt.hash} has been reverted`);
-  err.receipt = txReceipt;
-  err.code = 'FailedTxError';
-  return err;
-};

@@ -8,14 +8,15 @@ const Debug = require('debug');
 const Web3 = require('web3');
 const net = require('net');
 
+const { FailedTxError } = require('./errors');
 const { calculateEstimatedGas, newFailedTxError } = require('./utils');
-const { web3cfg } = require('../config')
+const { web3Cfg } = require('../config')
 const logger = Debug('app:web3');
 
 module.exports.newEngine = (provider, options = {}) => {
   // return new Web3(provider || web3cfg.provider);
-  return new Web3(provider || web3cfg.provider, net, {
-    defaultGasPrice: options.gasPrice || web3cfg.gasPrice,
+  return new Web3(provider || web3Cfg.provider, net, {
+    defaultGasPrice: options.gasPrice || web3Cfg.gasPrice,
   });
 };
 
@@ -56,7 +57,7 @@ module.exports.contractSendTx = (web3, { to: contractAddr, abi, from, method, pa
       }).on('transactionHash', (txHash) => {
         logger(`Tx executed: ${txHash}`)
       }).on('receipt', (txReceipt) => {
-        if (!txReceipt.status) reject(txReceipt);
+        if (!txReceipt.status) reject(FailedTxError(txReceipt));
         else resolve(txReceipt);
       }).on('error', reject);
 
@@ -80,7 +81,7 @@ module.exports.deployContract = (web3, { from, abi, bytecode, params }) => {
       }).on('transactionHash', (txHash) => {
         logger(`Tx executed: ${txHash}`)
       }).on('receipt', (txReceipt) => {
-        if (!txReceipt.status) reject(newFailedTxError(txReceipt));
+        if (!txReceipt.status) reject(FailedTxError(txReceipt));
         else resolve(txReceipt);
       }).on('error', reject);
 

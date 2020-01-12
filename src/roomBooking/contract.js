@@ -41,18 +41,18 @@ module.exports.appendCompany = (web3, { from, contractAt }, { companyAddr }) => 
   })
 }
 
-module.exports.createReservation = (web3, { from, contractAt }, { companyId, roomId, bookDate }) => {
+module.exports.createReservation = (web3, { from, contractAt }, { companyId, roomId, bookingDateHour }) => {
   validators.validateAddress(from, 'from');
   validators.validateAddress(contractAt, 'contractAt');
 
   validators.validateNotEmptyStr(companyId, 'companyId');
   validators.validateNotEmptyStr(roomId, 'roomId');
-  validators.validateDate(bookDate, 'date');
+  validators.validateDate(bookingDateHour, 'date');
 
-  const year = bookDate.getFullYear();
-  const month = bookDate.getMonth() + 1;
-  const day = bookDate.getDay();
-  const hour = bookDate.getHours();
+  const year = bookingDateHour.getFullYear();
+  const month = bookingDateHour.getMonth() + 1;
+  const day = bookingDateHour.getDay();
+  const hour = bookingDateHour.getHours();
 
   return web3Wrapper.contractSendTx(web3, {
     to: contractAt,
@@ -67,6 +67,9 @@ module.exports.createReservation = (web3, { from, contractAt }, { companyId, roo
       day,
       hour,
     ]
+  }).then(tx => {
+    const eventArgs = web3Utils.eventArgs(tx, 'ReservationAdded');
+    return eventArgs['reservationId']
   })
 }
 

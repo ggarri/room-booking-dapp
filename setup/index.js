@@ -7,7 +7,7 @@ require('dotenv').config()
 
 const Debug = require('debug');
 const web3Wrapper = require('../src/web3/wrapper');
-const { web3cfg } = require('../src/config');
+const { web3Cfg } = require('../src/config');
 
 const logger = Debug('app:setup');
 const companyContractWrapper = require('../src/company/contract');
@@ -75,9 +75,9 @@ async function initRoomBooking(web3, companyOneOwnerAddr, companyOneAddr, compan
 }
 
 async function initializeApp() {
-  logger(`Using web3 provider: ${web3cfg.provider}`);
+  logger(`Using web3 provider: ${web3Cfg.provider}`);
 
-  const web3 = web3Wrapper.newEngine(web3cfg.provider);
+  const web3 = web3Wrapper.newEngine(web3Cfg.provider);
   const companyOneData = require('./companyOne.json');
   const companyTwoData = require('./companyTwo.json');
 

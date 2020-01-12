@@ -6,13 +6,13 @@
 
 
 const express = require('express');
+
 const {
-  newBookHandler
-} = require('../handler/booking');
+  newReservationHandler
+} = require('../handler/roomBooking');
 
 let router = express.Router();
 
-router.post('/', newBookHandler);
-
+router.post('', newReservationHandler);
 
 module.exports = router;

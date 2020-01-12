@@ -4,19 +4,13 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-require('dotenv').config()
+const web3Wrapper = require('./web3/wrapper');
+const express = require('./http')
 
-const server = require('./express');
-
-module.exports = (() => {
-  let server, web3;
-  return {
-    init: (httpCfg, web3Cfg) => {
-
-    },
-    start: () => {
-      const { port } = httpCfg;
-      server.start(port || 8080)
-    }
-  }
-})();
+module.exports.newHttpServer = ({ httpCfg, web3Cfg }) => {
+  const web3 = web3Wrapper.newEngine(web3Cfg.provider, web3Cfg.options);
+  return express.newServer(web3, {
+    port: httpCfg.port,
+    host: httpCfg.host
+  })
+};
