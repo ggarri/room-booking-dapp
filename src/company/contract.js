@@ -94,3 +94,14 @@ module.exports.roomExists = (web3, { contractAt }, { roomId }) => {
     ]
   });
 }
+
+module.exports.isBuildingOpen = (web3, { contractAt }, { hourAt }) => {
+  return web3Wrapper.contractCall(web3, {
+    to: contractAt,
+    method: 'isBuildingOpen',
+    abi: companyContract.abi,
+    params: [
+      hourAt
+    ]
+  });
+}

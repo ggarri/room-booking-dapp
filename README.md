@@ -112,14 +112,14 @@ company owner address and the employee addresses with the ones provided by ganac
 
 ```
 $> vim ./setup/companyOne.json
-```
+...
 "companyOwner": "<ACCOUNT_1>",
   "employees": [
     {
       "username": "employee_1",
       "address": "<ACCOUNT_2>"
     },
-```
+...
 ```
 
 and repeat same process for `./setup/companyTwo.json`
@@ -190,7 +190,7 @@ $> curl --request GET 'localhost:3000/reservation/0x6016776d8e9c88fe645b1bd84d60
 
 Delete reservation
 ```bash
-curl --request DELETE 'localhost:3000/reservation/0x6016776d8e9c88fe645b1bd84d60fb9be3c68757a43126292cab9cd157525580' \
+$> curl --request DELETE 'localhost:3000/reservation/0x6016776d8e9c88fe645b1bd84d60fb9be3c68757a43126292cab9cd157525580' \
 -u 0x2eF8fF21Dc389eB470a616ddF2D3535bdCa7e2b9:password
 ```
 

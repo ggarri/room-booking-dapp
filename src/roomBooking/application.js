@@ -18,7 +18,8 @@ const {
 const {
   validateCompanyId,
   validateCompanyRoomId,
-  validateEmployeeAddress
+  validateEmployeeAddress,
+  validateCompanyOpenAt
 } = require('./validator');
 
 const{
@@ -34,6 +35,10 @@ const isRoomAvailable = module.exports.isRoomAvailable = async (web3, { roomId, 
   await validateCompanyRoomId(web3, { companyId, roomId });
 
   console.log(bookingDateHour);
+
+  const hourAt = bookingDateHour.getHours();
+  await validateCompanyOpenAt(web3, { companyId, hourAt })
+
   const isAvailable = await callIsRoomAvailable(web3, {
     contractAt: roomBookingAddr
   }, {
@@ -52,8 +57,9 @@ module.exports.createReservation = async (web3, { employeeAddress, roomId, compa
     bookingDateHour
   });
 
+  const hourAt = bookingDateHour.getHours();
   if (!isAvailable) {
-    throw NotAvailableRoomError(companyId, roomId)
+    throw NotAvailableRoomError(companyId, roomId, hourAt)
   }
 
   await validateEmployeeAddress(web3, { employeeAddress })

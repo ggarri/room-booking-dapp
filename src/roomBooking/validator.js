@@ -11,17 +11,19 @@ const {
 
 const {
   companyAddress: callCompanyAddress,
-  isAddressEmployee: callIsAddressEmployee
+  isAddressEmployee: callIsAddressEmployee,
 } = require('./contract');
 
 const {
-  roomExists: callRoomExists
+  roomExists: callRoomExists,
+  isBuildingOpen: callIsBuildingOpen
 } = require('../company/contract')
 
 const {
   InvalidCompanyIdError,
   InvalidCompanyRoomIdError,
-  InvalidEmployeeAddrError
+  InvalidEmployeeAddrError,
+  CompanyIsNotOpenError
 } = require('./errors')
 
 const web3Utils = require('../web3/utils');
@@ -69,5 +71,27 @@ module.exports.validateCompanyRoomId = async (web3, { companyId, roomId }) => {
 
   if (!roomExists) {
     throw InvalidCompanyRoomIdError(companyId, roomId)
+  }
+}
+
+module.exports.validateCompanyOpenAt = async (web3, { companyId, hourAt }) => {
+  const companyAddr = await callCompanyAddress(web3, {
+    contractAt: roomBookingAddr
+  }, {
+    companyId
+  });
+
+  if (web3Utils.isEmptyAddress(companyAddr)) {
+    throw InvalidCompanyIdError(companyId);
+  }
+
+  const isOpen = await callIsBuildingOpen(web3, {
+    contractAt: companyAddr,
+  }, {
+    hourAt
+  });
+
+  if (!isOpen) {
+    throw CompanyIsNotOpenError(companyId, hourAt)
   }
 }
