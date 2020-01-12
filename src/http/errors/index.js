@@ -25,4 +25,13 @@ module.exports.RouteNotFoundError = (req) => {
   return err;
 }
 
-
+/**
+ * Web3AuthError
+ */
+const Web3AuthErrorCode = module.exports.Web3AuthErrorCode = 'WEB3_AUTH_ERR';
+module.exports.Web3AuthError = () => {
+  const err = new Error(`Invalid or missing Basic-Auth headers`);
+  err.code = Web3AuthErrorCode;
+  err.status = 503;
+  return err;
+}

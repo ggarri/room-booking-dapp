@@ -70,7 +70,7 @@ This is a NodeJS project
 ### Pre-requirements
 
 - Node >= v10.0
-- Ethereum client (`Ganache` for development)
+- Ganache-cli
 
 ### How to install
 
@@ -80,35 +80,68 @@ npm install
 
 ### Setup
 
-#### Environment
+**Step 0: Init Ganache**
 
-Using `Ganache` ...
+We launch `ganache-cli` and update `.env` with the corresponding ganache setup for then RPC endpoint
+```
+$> vim .env
 
-Using `Ethereum` ...
+RPC_HOST='http://127.0.0.1'
+RPC_PORT='7545'
+NETWORK_ID='577'
 
-#### Smart-contracts
+```
 
 **Step 1: Compile smart contracts**
+
+Compile latest varsion of the application contracts
 ```
 $> npm run truffle:compile
 ```
 
 **Step 2: Deploying and initializing application data**
 
-@TODO
+Initialize the application contracts
+```
+$> npm run server:setup
+...
+  app:setup REMEMBER: Update your ".env":
+  app:setup 	...
+  app:setup 	ROOM_BOOKING_CONTRACT_ADDR = "0x0d95Cc1752078e439d78720C98262598cd2f0DE8"
+  app:setup 	... +0ms
+  app:setup Finished successfully +1ms
+
+```
+
+**Step 3: Update .env**
+
+We update the contract address of the roomBooking contract deployed at the step above:
+```
+$> vim .env
+...
+ROOM_BOOKING_CONTRACT_ADDR = "0x0d95Cc1752078e439d78720C98262598cd2f0DE8"
+...
+```
 
 ### Running HTTP Api
 
-@TODO
+```
+$> npm run server:dev
+```
 
 ### Testing
 
-**Testing contracts**
+**1. Smart contracts test**
+
 ```bash
 npm run truffle:test
 ```
 
-**Testing api**
+**Manual api testing**
 
-@TODO Integrate JTest+Supertest framework
+
+
+**Integration Api testing**
+
+@TODO Implement JTest+Supertest test suite
 

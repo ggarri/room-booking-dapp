@@ -83,3 +83,14 @@ module.exports.getEmployeeAddr = (web3, { contractAt }, { username }) => {
     return res;
   })
 }
+
+module.exports.roomExists = (web3, { contractAt }, { roomId }) => {
+  return web3Wrapper.contractCall(web3, {
+    to: contractAt,
+    method: 'roomExists',
+    abi: companyContract.abi,
+    params: [
+      web3Utils.strToBytes(web3, roomId)
+    ]
+  });
+}

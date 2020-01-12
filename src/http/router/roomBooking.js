@@ -8,14 +8,22 @@
 const express = require('express');
 
 const {
-  newReservationHandler,
-  isRoomAvailableHandler
+  postReservationHandler,
+  isRoomAvailableHandler,
+  getReservationHandler,
+  deleteReservationHandler
 } = require('../handler/roomBooking');
+
+const {
+  web3AuthLock,
+  web3AuthUnlock,
+} = require('../middleware/web3');
 
 let router = express.Router();
 
 router.get('/isRoomAvailable', isRoomAvailableHandler);
-router.post('/new', newReservationHandler);
-
+router.get('/reservation/:reservationId', getReservationHandler);
+router.post('/reservation', web3AuthUnlock, postReservationHandler, web3AuthLock);
+router.delete('/reservation/:reservationId', web3AuthUnlock, deleteReservationHandler, web3AuthLock);
 
 module.exports = router;

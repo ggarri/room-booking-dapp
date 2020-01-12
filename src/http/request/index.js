@@ -8,7 +8,7 @@ const reduce = require('lodash.reduce');
 const { InvalidRequestError } = require('../errors');
 
 const extractRequestAttrs = module.exports.extractRequestAttrs = (req, query) => {
-  const params = { ...req.body, ...req.query };
+  const params = { ...req.body, ...req.query, ...req.params };
   return reduce(Object.keys(params), (result, key) => {
     if (query.indexOf(key) !== -1) {
       result[key] = params[key];
@@ -29,9 +29,9 @@ module.exports.validateRequestAttrs = (req, query) => {
 
 //@TODO Complete impl
 module.exports.extractWeb3FromAddr = (req) => {
-  return req.web3.defaultAddress;
+  return req.web3FromAddress;
 }
 
 module.exports.extractWeb3Engine = (req) => {
-  return req.web3.engine;
+  return req.web3Engine;
 }

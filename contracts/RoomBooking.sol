@@ -6,6 +6,8 @@ contract RoomBooking {
 
     struct Reservation {
         bytes32 reservationId;
+        bytes32 companyId;
+        bytes32 roomId;
         address employeeAddr;
         uint16 year;
         uint8 month;
@@ -42,6 +44,10 @@ contract RoomBooking {
 
     function isAddressAdmin(address addr) public view returns (bool) {
         return _isCompanyOwner(addr);
+    }
+
+    function isAddressEmployee(address addr) public view returns (bool) {
+        return _isCompanyEmployee(addr);
     }
 
     /*
@@ -89,6 +95,8 @@ contract RoomBooking {
 
         _reservations[reservationId] = Reservation({
             reservationId : reservationId,
+            companyId: companyId,
+            roomId: roomId,
             employeeAddr : msg.sender,
             year : year,
             month : month,
@@ -114,9 +122,11 @@ contract RoomBooking {
     }
 
     function reservationInfo(bytes32 rId) public view
-    returns (address employeeAddr, uint16 year, uint8 month, uint8 day, uint8 hour) {
+    returns (address employeeAddr, bytes32 companyId, bytes32 roomId, uint16 year, uint8 month, uint8 day, uint8 hour) {
         return (
         _reservations[rId].employeeAddr,
+        _reservations[rId].companyId,
+        _reservations[rId].roomId,
         _reservations[rId].year,
         _reservations[rId].month,
         _reservations[rId].day,

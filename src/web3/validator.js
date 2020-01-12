@@ -35,8 +35,11 @@ module.exports.validateNotEmptyStr = (value, argName = null) => {
   }
 }
 
-module.exports.validateDate = (value, argName = null) => {
+module.exports.validateBookingDate = (value, argName = null) => {
   if (!value instanceof Date) {
+    throw AssertArgError(`Invalid date object "${value}"`, argName);
+  }
+  if(isNaN(value.getTime())) {
     throw AssertArgError(`Invalid date object "${value}"`, argName);
   }
 }

@@ -7,14 +7,14 @@
 const { failedJsonResponse } = require('../response');
 const { RouteNotFoundError } = require('../errors')
 
-module.exports.routeNotFoundHandler = (req, res, next) => {
+module.exports.fallbackRouteHandler = (req, res, next) => {
   const err = RouteNotFoundError(req);
   res.status(404);
   res.setHeader('Content-Type', 'application/json');
   res.send(failedJsonResponse(err.message, err.code))
 };
 
-module.exports.fallbackErrorHandler = (err, req, res, next) => {
+module.exports.errorHandler = (err, req, res, next) => {
   const status = err.status || 500;
   console.error(err);
   res.status(status);
