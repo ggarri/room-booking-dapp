@@ -80,16 +80,17 @@ npm install
 
 ### Setup
 
-**Step 0: Init Ganache**
+**Step 0: Init Ganache and sync your environment**
 
-We launch `ganache-cli` and update `.env` with the corresponding ganache setup for then RPC endpoint
+First, we have to launch `ganache-cli`.
+
+Then we have to update `.env` with the corresponding ganache RPC endpoint.
 ```
 $> vim .env
 
 RPC_HOST='http://127.0.0.1'
 RPC_PORT='7545'
 NETWORK_ID='577'
-
 ```
 
 **Step 1: Compile smart contracts**
@@ -101,7 +102,29 @@ $> npm run truffle:compile
 
 **Step 2: Deploying and initializing application data**
 
-Initialize the application contracts
+To initialize your the roomBooking platform we have a couple json files
+including companies information:
+- [./setup/companyOne.json](./setup/companyOne.json)
+- [./setup/companyTwo.json](./setup/companyTwo.json)
+
+As we are using `ganache` as blockchain network we will need to update the
+company owner address and the employee addresses with the ones provided by ganache:
+
+```
+$> vim ./setup/companyOne.json
+```
+"companyOwner": "<ACCOUNT_1>",
+  "employees": [
+    {
+      "username": "employee_1",
+      "address": "<ACCOUNT_2>"
+    },
+```
+```
+
+and repeat same process for `./setup/companyTwo.json`
+
+Once our company json files are updated we have to launch the setup script as follow
 ```
 $> npm run server:setup
 ...
@@ -113,9 +136,12 @@ $> npm run server:setup
 
 ```
 
-**Step 3: Update .env**
+Once the script is completed we will have a `roomBooking` smart contract deployed and initialize with
+the two companies.
 
-We update the contract address of the roomBooking contract deployed at the step above:
+**Step 3: Update ROOM_BOOKING_CONTRACT_ADDR**
+
+We have to copu the address of the `roomBooking` contract deployed in the step before into `.env`:
 ```
 $> vim .env
 ...
@@ -125,6 +151,7 @@ ROOM_BOOKING_CONTRACT_ADDR = "0x0d95Cc1752078e439d78720C98262598cd2f0DE8"
 
 ### Running HTTP Api
 
+Once our environment is ready we can launch our HTTP API server running following command:
 ```
 $> npm run server:dev
 ```
@@ -137,9 +164,35 @@ $> npm run server:dev
 npm run truffle:test
 ```
 
-**Manual api testing**
+**Manual api testing (curl)**
 
+Check room availability
+```bash
+$> curl --request GET 'localhost:3000/isRoomAvailable?roomId=C01&companyId=COLA&bookingDateHour=2019-10-10T18:00'
+```
 
+Create a new reservation
+```bash
+$> curl --request POST 'localhost:3000/reservation' \
+--header 'Content-Type: application/json' \
+-u 0x2eF8fF21Dc389eB470a616ddF2D3535bdCa7e2b9:password \
+--data-raw '{
+"roomId":"C01",
+"companyId":"COLA",
+"bookingDateHour":"2019-10-10T18:00"
+}'
+```
+
+Fetch reservation information
+```bash
+$> curl --request GET 'localhost:3000/reservation/0x6016776d8e9c88fe645b1bd84d60fb9be3c68757a43126292cab9cd157525580'
+```
+
+Delete reservation
+```bash
+curl --request DELETE 'localhost:3000/reservation/0x6016776d8e9c88fe645b1bd84d60fb9be3c68757a43126292cab9cd157525580' \
+-u 0x2eF8fF21Dc389eB470a616ddF2D3535bdCa7e2b9:password
+```
 
 **Integration Api testing**
 

@@ -8,7 +8,7 @@ const {
 } = require('./middleware/fallback');
 
 const {
-  web3Injector,
+  web3Injector
 } = require('./middleware/web3');
 
 const roomBookingRouter = require('./router/roomBooking')
@@ -18,7 +18,7 @@ module.exports.newServer = (web3, { port, host, env }) => {
   http.Server(app);
 
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   app.use(web3Injector(web3));
 
