@@ -20,6 +20,8 @@ module.exports.deploy = (web3, { from }, { companyAddr }) => {
     params: [
       companyAddr
     ]
+  }).then(tx => {
+    return tx.contractAddress;
   });
 }
 
@@ -58,8 +60,8 @@ module.exports.createReservation = (web3, { from, contractAt }, { companyId, roo
     method: 'createReservation',
     abi: roomBookingContract.abi,
     params: [
-      web3Utils.strToBytes(companyId),
-      web3Utils.strToBytes(roomId),
+      web3Utils.strToBytes(web3, companyId),
+      web3Utils.strToBytes(web3, roomId),
       year,
       month,
       day,
@@ -98,8 +100,8 @@ module.exports.reservationInfo = (web3, { contractAt }, { reservationId }) => {
     const { companyId: companyIdHex, roomId: roomIdHex, year, day, month, hour } = res;
     const bookDate = new Date(`${year}/${month}/${day} ${hour}:00`);
     return {
-      companyId: web3Utils.hexToStr(companyIdHex),
-      roomId: web3Utils.hexToStr(roomIdHex),
+      companyId: web3Utils.hexToStr(web3, companyIdHex),
+      roomId: web3Utils.hexToStr(web3, roomIdHex),
       bookDate
     }
   })
@@ -123,8 +125,8 @@ module.exports.isRoomAvailable = (web3, { contractAt }, { companyId, roomId, boo
     method: 'isRoomAvailable',
     abi: roomBookingContract.abi,
     params: [
-      web3Utils.strToBytes(companyId),
-      web3Utils.strToBytes(roomId),
+      web3Utils.strToBytes(web3, companyId),
+      web3Utils.strToBytes(web3, roomId),
       year,
       month,
       day,

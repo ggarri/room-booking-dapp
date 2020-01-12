@@ -44,7 +44,7 @@ module.exports.addEmployee = (web3, { from, contractAt }, { employeeUsername, em
     method: 'addEmployee',
     abi: companyContract.abi,
     params: [
-      web3Utils.strToBytes(employeeUsername),
+      web3Utils.strToBytes(web3, employeeUsername),
       employeeAddr
     ]
   })
@@ -62,7 +62,7 @@ module.exports.addRoom = (web3, { from, contractAt }, { roomId, roomName }) => {
     method: 'addRoom',
     abi: companyContract.abi,
     params: [
-      web3Utils.strToBytes(roomId),
+      web3Utils.strToBytes(web3, roomId),
       roomName
     ]
   })

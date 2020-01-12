@@ -9,43 +9,46 @@ const Debug = require('debug');
 const web3Wrapper = require('../src/web3/wrapper');
 const { web3cfg } = require('../src/config');
 
-
 const logger = Debug('app:setup');
 const companyContractWrapper = require('../src/company/contract');
 const roomBookingContractWrapper = require('../src/roomBooking/contract');
 
-
 async function initCompany(web3, companyInfo) {
-  const companyOneAddr = await companyContractWrapper.deploy(web3, {
+  const companyAddr = await companyContractWrapper.deploy(web3, {
     from: companyInfo.companyOwner
   }, {
     companyName: companyInfo.companyName,
     companyId: companyInfo.companyId,
     openAt: companyInfo.openAt,
-    closeAt: companyInfo.closeAt,
+    closeAt: companyInfo.closeAt
   });
+  logger(`Company "${companyInfo.companyName}" was deployed at ${companyAddr}`);
 
-  for(const employee in companyInfo.employees) {
+  for ( let idx = 0; idx < companyInfo.employees.length; idx++ ) {
+    const employee = companyInfo.employees[idx];
     await companyContractWrapper.addEmployee(web3, {
-      contractAt: companyOneAddr,
+      contractAt: companyAddr,
       from: companyInfo.companyOwner
     }, {
       employeeAddr: employee.address,
-      employeeUsername: employee.username,
+      employeeUsername: employee.username
     })
+    logger(`Employee ${employee.username} was added`)
   }
 
-  for ( const room in companyInfo.rooms ) {
+  for ( let idx = 0; idx < companyInfo.rooms.length; idx++ ) {
+    const room = companyInfo.rooms[idx];
     await companyContractWrapper.addRoom(web3, {
-      contractAt: companyOneAddr,
+      contractAt: companyAddr,
       from: companyInfo.companyOwner
     }, {
       roomId: room.id,
-      roomName: room.name,
-    })
+      roomName: room.name
+    });
+    logger(`Room ${room.name} was added`)
   }
 
-  return companyOneAddr;
+  return companyAddr;
 }
 
 async function initRoomBooking(web3, companyOneOwnerAddr, companyOneAddr, companyTwoAddr = null) {
@@ -55,12 +58,17 @@ async function initRoomBooking(web3, companyOneOwnerAddr, companyOneAddr, compan
     companyAddr: companyOneAddr
   });
 
-  if(companyTwoAddr) {
+  logger(`RoomBooking deployed at ${roomBookingAddr}`)
+  logger(`Added companyOne ${companyOneAddr}`);
+
+  if (companyTwoAddr) {
     roomBookingContractWrapper.appendCompany(web3, {
-      from: companyOneOwnerAddr,
+      contractAt: roomBookingAddr,
+      from: companyOneOwnerAddr
     }, {
       companyAddr: companyTwoAddr
-    })
+    });
+    logger(`Added companyTwo ${companyTwoAddr}`);
   }
 
   return roomBookingAddr;
@@ -74,21 +82,28 @@ async function initializeApp() {
   const companyTwoData = require('./companyTwo.json');
 
   const companyOneAddr = await initCompany(web3, companyOneData);
-  logger(`CompanyOne "${companyOneData.companyName}" deployed at: ${companyOneAddr}`);
+  logger(`CompanyOne "${companyOneData.companyName}" was initialized successfully`);
 
   const companyTwoAddr = await initCompany(web3, companyTwoData);
-  logger(`CompanyTwo "${companyTwoData.companyName}" deployed at: ${companyTwoAddr}`);
+  logger(`CompanyOne "${companyTwoData.companyName}" was initialized successfully`);
 
   const roomBookingAddr = await initRoomBooking(web3, companyOneData.companyOwner, companyOneAddr, companyTwoAddr);
-  logger(`RoomBooking deployed at: ${roomBookingAddr} (REMEMBER !!! update your '.env')`);
+  logger(`RoomBooking was initialized correctly`);
+  return roomBookingAddr
 }
 
 /**
- * MAIN EXECUTION
+ * MAIN PROGRAM
  */
-initializeApp().then(() => {
-    process.exit(0)
-  }).catch(err => {
+initializeApp().then((roomBookingAddr) => {
+  logger(`REMEMBER: Update your ".env":\n` +
+    `\t...\n`+
+    `\tROOM_BOOKING_CONTRACT_ADDR = "${roomBookingAddr}"\n`+
+    `\t...`
+  )
+  logger(`Finished successfully`);
+  process.exit(0)
+}).catch(err => {
   console.error(err);
   process.exit(1)
 })
