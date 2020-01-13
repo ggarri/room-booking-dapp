@@ -12734,8 +12734,7 @@
     }
   },
   "schemaVersion": "3.0.20",
-  "updatedAt": "2020-01-12T16:24:27.162Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-01-13T10:11:23.203Z",
   "devdoc": {
     "author": "Gabriel Garrido",
     "methods": {},

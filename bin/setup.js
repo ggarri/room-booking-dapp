@@ -13,6 +13,9 @@ const logger = Debug('app:setup');
 const companyContractWrapper = require('../src/company/contract');
 const roomBookingContractWrapper = require('../src/roomBooking/contract');
 
+const companyOneData = require('../setup/companyOne.json');
+const companyTwoData = require('../setup/companyTwo.json');
+
 async function initCompany(web3, companyInfo) {
   const companyAddr = await companyContractWrapper.deploy(web3, {
     from: companyInfo.companyOwner
@@ -78,8 +81,6 @@ async function initializeApp() {
   logger(`Using web3 provider: ${web3Cfg.provider}`);
 
   const web3 = web3Wrapper.newEngine(web3Cfg.provider);
-  const companyOneData = require('./companyOne.json');
-  const companyTwoData = require('./companyTwo.json');
 
   const companyOneAddr = await initCompany(web3, companyOneData);
   logger(`CompanyOne "${companyOneData.companyName}" was initialized successfully`);

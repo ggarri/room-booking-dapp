@@ -110,8 +110,7 @@ our application smart-contracts:
 ```
 $> npm run server:setup
 ...
-> room-booking-dapp@0.0.1 server:setup /home/ggarrido/projects/room-booking-dapp
-> node ./setup/index.js
+> node ./bin/setup.js
 ...
   app:setup REMEMBER: Update your ".env":
   app:setup 	...
@@ -146,6 +145,17 @@ ROOM_BOOKING_CONTRACT_ADDR = "<CONTRACT_ADDRESS>"
 Once our environment is ready we can finally launch our HTTP API server by executing following command:
 ```
 $> npm run server:dev
+> cross-env NODE_ENV=development node ./bin/www
+
+  app:www Server listening on 127.0.0.1:3000 +0ms
+```
+
+By default HTTP API will be running on `127.0.0.1:3000`, if you want to use a different PORT or listening host,
+update `.env`:
+
+```
+HTTP_PORT=3000
+HTTP_HOST=127.0.0.1
 ```
 
 ### Testing

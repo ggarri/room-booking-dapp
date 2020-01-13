@@ -34,8 +34,6 @@ const isRoomAvailable = module.exports.isRoomAvailable = async (web3, { roomId, 
   await validateCompanyId(web3, { companyId });
   await validateCompanyRoomId(web3, { companyId, roomId });
 
-  console.log(bookingDateHour);
-
   const hourAt = bookingDateHour.getHours();
   await validateCompanyOpenAt(web3, { companyId, hourAt })
 

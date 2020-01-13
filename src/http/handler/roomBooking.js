@@ -40,8 +40,6 @@ module.exports.postReservationHandler = async (req, res, next) => {
     res.send(successJsonResponse({
       reservationId: rId
     }));
-
-    next();
   } catch ( err ) {
     next(err)
   }
@@ -63,8 +61,6 @@ module.exports.isRoomAvailableHandler = async (req, res, next) => {
     res.send(successJsonResponse({
       isAvailable
     }));
-
-    next();
   } catch ( err ) {
     next(err)
   }
@@ -103,8 +99,6 @@ module.exports.deleteReservationHandler = async(req, res, next) => {
     })
 
     res.send(successJsonResponse(rInfo));
-
-    next();
   } catch ( err ) {
     next(err)
   }

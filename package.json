@@ -7,7 +7,7 @@
         "truffle:test": "truffle test --network=test",
         "truffle:compile": "truffle compile --all",
         "truffle:deploy": "truffle deploy --reset --network",
-        "server:setup": "node ./setup/index.js",
+        "server:setup": "node ./bin/setup.js",
         "server:watch": "cross-env NODE_ENV=development nodemon --watch src --inspect=0.0.0.0:9230 ./bin/www",
         "server:dev": "cross-env NODE_ENV=development node ./bin/www",
         "server:prod": "cross-env NODE_ENV=production node ./bin/www"

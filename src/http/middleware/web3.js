@@ -5,8 +5,8 @@
  */
 
 const Debug = require('debug');
-const logger = Debug('app:http:middleware');
-const loggerErr = Debug('app:http:middleware:err');
+const logger = Debug('app:http:web3');
+const loggerErr = Debug('app:http:err');
 
 const {
   extractWeb3Engine,
@@ -36,7 +36,7 @@ module.exports.web3AuthUnlock = async (req, res, next) => {
     const web3 = extractWeb3Engine(req);
     // logger(`Web3: Unlocking wallet ${ethAddress}...`);
     await web3.eth.personal.unlockAccount(ethAddress, password);
-    logger(`Web3: Wallet ${ethAddress} is unlocked`);
+    logger(`Wallet ${ethAddress} is unlocked`);
     req.web3FromAddress = ethAddress;
     next();
   } catch(err) {
@@ -51,7 +51,7 @@ module.exports.web3AuthLock = async (req, res, next) => {
       const web3 = extractWeb3Engine(req);
       // logger(`Web3: Locking wallet ${ethAddress}...`);
       await web3.eth.personal.lockAccount(ethAddress);
-      logger(`Web3: Wallet ${ethAddress} is locked`);
+      logger(`Wallet ${ethAddress} is locked`);
     } catch(err) {
       loggerErr(err)
     }

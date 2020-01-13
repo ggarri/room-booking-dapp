@@ -4,20 +4,24 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
+const Debug = require('debug');
 const { failedJsonResponse } = require('../response');
 const { RouteNotFoundError } = require('../errors')
 
-module.exports.fallbackRouteHandler = (req, res, next) => {
+const loggerErr = Debug('app:http:err');
+
+module.exports.noRouteErrHandler = (req, res, next) => {
   const err = RouteNotFoundError(req);
   res.status(404);
   res.setHeader('Content-Type', 'application/json');
-  res.send(failedJsonResponse(err.message, err.code))
+  res.send(failedJsonResponse(err.message, err.code));
+  loggerErr(err);
 };
 
-module.exports.errorHandler = (err, req, res, next) => {
+module.exports.fallbackErrHandler = (err, req, res, next) => {
   const status = err.status || 500;
-  console.error(err);
   res.status(status);
   res.setHeader('Content-Type', 'application/json');
-  res.json(failedJsonResponse(err.message, status))
+  res.json(failedJsonResponse(err.message, status));
+  loggerErr(err);
 };

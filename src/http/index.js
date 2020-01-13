@@ -3,15 +3,19 @@ const bodyParser = require('body-parser');
 const http = require('http');
 
 const {
-  fallbackRouteHandler,
-  errorHandler
-} = require('./middleware/fallback');
+  noRouteErrHandler,
+  fallbackErrHandler
+} = require('./middleware/error');
 
 const {
   web3Injector
 } = require('./middleware/web3');
 
-const roomBookingRouter = require('./router/roomBooking')
+const {
+  loggerHandler
+} = require('./middleware/logger');
+
+const roomBookingRouter = require('./router/roomBooking');
 
 module.exports.newServer = (web3, { port, host, env }) => {
   const app = express();
@@ -21,17 +25,14 @@ module.exports.newServer = (web3, { port, host, env }) => {
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.use(web3Injector(web3));
-
-  app.get('/hello', (req, res, next) => {
-    res.send('Hello World!');
-  });
+  app.use(loggerHandler);
 
   app.use('', roomBookingRouter);
 
   // catch 404 and forward to error handler
-  app.use(fallbackRouteHandler);
+  app.use(noRouteErrHandler);
   // error handler
-  app.use(errorHandler);
+  app.use(fallbackErrHandler);
 
   app.set('port', port);
   app.set('host', host);
