@@ -4,11 +4,17 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-const FailedTxErrorCode = module.exports.FailedTxErrorCode = 'WEB3_TX_FAILED';
-module.exports.FailedTxError = (txReceipt) => {
+const TxFailedErrorCode = module.exports.FailedTxErrorCode = 'WEB3_TX_FAILED';
+module.exports.TxFailedError = (txReceipt) => {
   const err = new Error(`Tx ${txReceipt.hash} has been reverted`);
   err.receipt = txReceipt;
-  err.code = FailedTxErrorCode;
+  err.code = TxFailedErrorCode;
+  return err;
+};
+
+const TxExceptionErrorCode = module.exports.TxExceptionErrorCode = 'WEB3_TX_EXCEPTION';
+module.exports.TxExceptionError = (err) => {
+  err.code = TxExceptionErrorCode;
   return err;
 };
 

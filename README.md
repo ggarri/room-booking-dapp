@@ -2,8 +2,6 @@
 
 ## Introduction
 
-### Business problem
-
 Two companies, COKE and PEPSI, are sharing an office building. Tomorrow is COLA
 day (for one day), that the two companies are celebrating. They are gathering a number
 of business partners in the building. In order to optimize space utilization, they have
@@ -21,95 +19,72 @@ on COLA day (8:00-9:00, 9:00-10:00, etc.)
 - Users can book meeting rooms by the hour (first come first served)
 - Users can cancel their own reservations
 
-### Requirements
+### Functional requirements
 
-#### Functional requirements
+- Both companies provide a set of meeting rooms to the booking platform
+- Both company's employees are authorized to book a meeting room within both companies
+- Only reservation owners can cancel their own reservation
+- Meeting room availability and reservation are public information
+- Both company's employees have unique credential
 
-- Each company provides a set of meeting rooms to the booking platform
-- Every company employee is authorized to book a meeting room, if it is available
-- Every company employee is authorized to cancel a reservation over a meeting room
-- Everyone, included guest users, can see every room availability and reservation
+### Non-functional requirements
 
-#### Non-functional requirements
-
-- There must not be single authority or administrator role
-- System must be resilient and reservation process as transparent as possible
-- Reservation collision must be prevented
+- Both company's administrator has the same rights
+- Meeting room can be booked only once (first come first served)
+- Each company can run its own instance of the booking platform
+- Reservation process must be transparent
 
 ### Reasoning the taken approach
 
-Derived from the requirements above, we concluded that there is a significant lack of trust in between both companies taking part
- in the event therefore we must design a application where there must be non-authority or in case of being it must be both
-companies at the same level. Also the transparency and security are two very relevant requirements in this application.
+Considering above requirements, I deem that, the best approach to overcome them is
+the usage of distributed technologies such as a blockchain network + smart-contracts. Out of the multiple alternatives
+for it such as NEO, EOS and others we are going to use `Ethereum` + `Solidity` for this project along the toolkit of web3: web3js, truffle...
 
-Therefore, out of the available technologies and options currently available for this project,
-we deemed that using distributed technologies such as a blockchain seems to be a the best approach. Another consideration to make is that
-we need to force the application business logic using smart-contracts due, and out of the multiple alternatives
-for it such as NEO, EOS and others we are going to take `Ethereum` + `Solidity` to implement this project.
+To interact with an ethereum blockchain we have two alternatives:
 
-To interact with an ethereum blockchain we have two main alternatives:
+- Client side application: Private-keys hold by the employee
+- Server side application: Private-keys hold by the company side
 
-- Client side application
-- Server side application
+For the sake of simplicity I am going to implement a `server-side` application where each company is going to run its own instance of a NodeJS server
+connected to it own local instance of Ethereum blockchain holding the encrypted wallets of its own employees. The application will consist on a express HTTP API to interact with the deployed smart-contracts, where the employee provides the passphrase to
+decrypt its wallet and trust on its own company server to send the transaction to book/cancel a room reservation and also to query the status of the meeting rooms.
 
-IMO a pure client side distributed app is a better fit in this case but
-aiming to showcase my NodeJS skills I am implementing an http API in using `express` which will interact with the blockchain
-using web3js.
-
-**Caveats**
-
-The usage of a blockchain technologies, such as Ethereum, brings along an additional complexity we need to be aware of and evaluate too.
-Ethereum, as other blockchains, has limitation due to its reduced storage and its low performance. But reading over the project
-requirements there is not specification about maximum time responses, neither on the necessity of storing historical booking data,
-therefore we could still be confident that ethereum seems to be a good solution.
-
-## Development
-
-This is a NodeJS project
+## How to start (Development)
 
 ### Pre-requirements
 
 - Node >= v10.0
-- Ganache-cli
+- Ganache-cli: We are going to use ganache to simulate a ethereum network during the phase of the project
 
-### How to install
+### Install project deps
 
 ```
 npm install
 ```
 
-### Setup
+### Initial project setup
 
-**Step 0: Init Ganache and sync your environment**
+**Step 0: Run Ganache instance**
 
 First, we have to launch `ganache-cli`.
 
-Then we have to update `.env` with the corresponding ganache RPC endpoint.
-```
-$> vim .env
-
-RPC_HOST='http://127.0.0.1'
-RPC_PORT='7545'
-NETWORK_ID='577'
-```
-
 **Step 1: Compile smart contracts**
 
-Compile latest varsion of the application contracts
+Compile latest version of the application smart-contracts
 ```
 $> npm run truffle:compile
 ```
 
-**Step 2: Deploying and initializing application data**
+**Step 2: Update companyOne and companyTwo information**
 
-To initialize your the roomBooking platform we have a couple json files
-including companies information:
+To initialize your the `roomBooking.sol` smart contract, first we need to
+insert the information about the companies which are going to take part in the
+platform:
 - [./setup/companyOne.json](./setup/companyOne.json)
 - [./setup/companyTwo.json](./setup/companyTwo.json)
 
-As we are using `ganache` as blockchain network we will need to update the
-company owner address and the employee addresses with the ones provided by ganache:
-
+On above files we will need to update the information referring to the
+`companyOwner` and `*[employee].address` using the accounts generate by ganache:
 ```
 $> vim ./setup/companyOne.json
 ...
@@ -124,41 +99,58 @@ $> vim ./setup/companyOne.json
 
 and repeat same process for `./setup/companyTwo.json`
 
-Once our company json files are updated we have to launch the setup script as follow
+**Step 3: Deploying and initializing application contracts**
+
+Once our company json files are updated we have to launch the setup script to deploy
+our application smart-contracts:
+- [`Company.sol`](./contracts/Company.sol): Company's information and administration business logic for employees and meeting rooms
+- [`RoomBooking.sol`](./contracts/RoomBooking.sol): Booking meeting room impl
+
+
 ```
 $> npm run server:setup
 ...
+> room-booking-dapp@0.0.1 server:setup /home/ggarrido/projects/room-booking-dapp
+> node ./setup/index.js
+...
   app:setup REMEMBER: Update your ".env":
   app:setup 	...
-  app:setup 	ROOM_BOOKING_CONTRACT_ADDR = "0x0d95Cc1752078e439d78720C98262598cd2f0DE8"
+  app:setup 	ROOM_BOOKING_CONTRACT_ADDR = "<CONTRACT_ADDRESS>"
   app:setup 	... +0ms
   app:setup Finished successfully +1ms
 
 ```
 
-Once the script is completed we will have a `roomBooking` smart contract deployed and initialize with
-the two companies.
+Once the script is completed we will have a `roomBooking.sol` smart-contract deployed and initialize with
+companyOne and companyTwo.
 
-**Step 3: Update ROOM_BOOKING_CONTRACT_ADDR**
+**Step 3: Update .env**
 
-We have to copu the address of the `roomBooking` contract deployed in the step before into `.env`:
+At last, we have to copy the `.env.sample` to `.env` and update it using the Ganache RPC endpoint and
+the latest version of our `ROOM_BOOKING_CONTRACT_ADDR`:
+
 ```
+$> cp .env.sample .env
 $> vim .env
 ...
-ROOM_BOOKING_CONTRACT_ADDR = "0x0d95Cc1752078e439d78720C98262598cd2f0DE8"
+RPC_HOST='http://127.0.0.1'
+RPC_PORT='7545'
+NETWORK_ID='577'
+
+ROOM_BOOKING_CONTRACT_ADDR = "<CONTRACT_ADDRESS>"
 ...
 ```
 
 ### Running HTTP Api
 
-Once our environment is ready we can launch our HTTP API server running following command:
+Once our environment is ready we can finally launch our HTTP API server by executing following command:
 ```
 $> npm run server:dev
 ```
 
 ### Testing
 
-**1. Smart contracts test**
+**Smart contracts test**
 
 ```bash
 npm run truffle:test

@@ -32,9 +32,9 @@ module.exports.calculateEstimatedGas = (method, params) => {
       if (err) {
         reject(err);
       } else {
-        const gasOverflow = parseInt(estimatedGas * 1.2); // 20% Increment
-        const gasMin = 100000;
-        const gas = gasMin > gasOverflow ? gasMin : gasOverflow;
+        const gasMax = parseInt(estimatedGas * 1.2); // 20% Increment
+        const gasMin = 21000;
+        const gas = gasMin > gasMax ? gasMin : gasMax;
         resolve(gas);
       }
     });
