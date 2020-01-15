@@ -1,25 +1,25 @@
 {
   "companyId": "COLA",
   "companyName": "Cola S.L",
-  "companyOwner": "0x68146704DA2f1dC14c9c32d497efc25d769ffbC2",
+  "companyOwner": "0xA3e9673227000F4738827c4baB6913ef34b469bc",
   "openAt": 8,
   "closeAt": 20,
   "employees": [
     {
       "username": "employee_1",
-      "address": "0x2eF8fF21Dc389eB470a616ddF2D3535bdCa7e2b9"
+      "address": "0xAD1292f481aDcaa52e01913259a99486E156d09E"
     },
     {
       "username": "employee_2",
-      "address": "0xA1cd12FBe0F9e23Fc64526255c5b50238D432176"
+      "address": "0xda8AfC03d445E960c95c04299cf835025d92E235"
     },
     {
       "username": "employee_3",
-      "address": "0x0dC245D3Ee545d5B4918C64a362561cC5E530649"
+      "address": "0x9279d8679F8Ed3a4a2c6f5101C2CF675F228E9F1"
     },
     {
       "username": "employee_4",
-      "address": "0x42F3CeD9b7D71D2219807fded512ee13b3Cd09DE"
+      "address": "0x3E0E01002FC8e23579b4DaB7A5c25FaD49a1425f"
     }
   ],
   "rooms": [

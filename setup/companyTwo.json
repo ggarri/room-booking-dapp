@@ -1,25 +1,25 @@
 {
   "companyId": "PEPSI",
   "companyName": "PEPSI S.A",
-  "companyOwner": "0x68146704DA2f1dC14c9c32d497efc25d769ffbC2",
+  "companyOwner": "0xc311C525fa9afe1E332aBCB41F73AC3329231cA4",
   "openAt": 8,
   "closeAt": 20,
   "employees": [
     {
       "username": "employee_1",
-      "address": "0x2eF8fF21Dc389eB470a616ddF2D3535bdCa7e2b9"
+      "address": "0x5448Fa095dd0cC1E180FeFD621f0E7F9f4fC6187"
     },
     {
       "username": "employee_2",
-      "address": "0xA1cd12FBe0F9e23Fc64526255c5b50238D432176"
+      "address": "0x81f8D4098b7d39DBD95827ed224D9357c22C5352"
     },
     {
       "username": "employee_3",
-      "address": "0x0dC245D3Ee545d5B4918C64a362561cC5E530649"
+      "address": "0x6D8bEA5cda361a443EaeaEAf914184c182D9A8Dc"
     },
     {
       "username": "employee_4",
-      "address": "0x42F3CeD9b7D71D2219807fded512ee13b3Cd09DE"
+      "address": "0xE2282c5ED20bb21832eCc6EA7fac087CDC815A4E"
     }
   ],
   "rooms": [

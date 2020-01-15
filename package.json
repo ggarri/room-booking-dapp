@@ -10,7 +10,9 @@
         "server:setup": "node ./bin/setup.js",
         "server:watch": "cross-env NODE_ENV=development nodemon --watch src --inspect=0.0.0.0:9230 ./bin/www",
         "server:dev": "cross-env NODE_ENV=development node ./bin/www",
-        "server:prod": "cross-env NODE_ENV=production node ./bin/www"
+        "server:prod": "cross-env NODE_ENV=production node ./bin/www",
+        "docker:build": "docker build -t room-booking-app:latest -f ./Dockerfile .",
+        "docker:run": "docker run -it -p 3000:3000 -p 7545:7545 room-booking-app:latest"
     },
     "repository": {
         "type": "git",
